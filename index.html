@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CECCA AUTOS | Presupuestador</title>
+  <link rel="stylesheet" href="styles.css?v=1.20" /> 
+  
+  <style>
+    .presupuesto-form {
+      max-width: 700px;
+      margin: 2rem auto 0;
+      text-align: left;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--accent-2);
+    }
+    .form-group input,
+    .form-group select {
+      background: #1f1f1f;
+      border: 1px solid #333;
+      color: var(--text);
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5z%22%20fill%3D%22%23b0b0b0%22%2F%3E%3C%2Fsvg%3E');
+      background-repeat: no-repeat;
+      background-position: right 0.7rem center;
+      background-size: 1.2em;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    /* Oculta flechas en campos de número */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    /* Color del Placeholder */
+    ::placeholder {
+      color: #666;
+      opacity: 1; 
+    }
+    ::-ms-input-placeholder {
+      color: #666;
+    }
+
+    /* ESTILOS PARA CHECKBOX */
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      background: #1f1f1f;
+      padding: 0.8rem;
+      border-radius: 8px;
+      border: 1px solid #333;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: 1.2em;
+      height: 1.2em;
+      margin-right: 0.8rem;
+      accent-color: var(--accent);
+      -webkit-appearance: checkbox;
+      -moz-appearance: checkbox;
+      appearance: checkbox;
+      background-image: none;
+    }
+    .checkbox-group label {
+      margin: 0;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .total-display {
+      text-align: right;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 1rem;
+    }
+    .btn-generar {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      justify-content: center;
+    }
+    
+    /* --- INICIO: Estilo para botón de enlace externo (NUEVO) --- */
+    .label-with-button {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .label-with-button label {
+      margin-bottom: 0;
+    }
+    .btn-link-externo {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 22px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .btn-link-externo:hover {
+      background: var(--accent);
+      color: #000;
+    }
+    /* --- FIN: Estilo botón --- */
+
+    @media (min-width: 769px) {
+      .form-grid.cliente-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .checkbox-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .form-grid.firmas-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="hamburger" id="hamburger" aria-label="menu" aria-expanded="false" role="button" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+    <a href="index.html#home" class="logo">CECCA AUTOS</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html#quienes-somos">Quiénes Somos</a></li>
+      <li><a href="index.html#venta">Venta</a></li>
+      <li><a href="index.html#gestoria">Gestoría</a></li>
+      <li><a href="index.html#financiacion">Financiación</a></li> 
+      <li><a href="index.html#seguros">Seguros</a></li>
+      <li><a href="index.html#ubicacion">Ubicación</a></li>
+      <li><a href="index.html#contacto">Contacto</a></li>
+      <li class="hide-on-mobile">
+        <a href="#home" aria-label="Ir al inicio de la página">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-user-round"><path d="M18 20a6 6 0 0 0-12 0"/><circle cx="12" cy="10" r="4"/><circle cx="12" cy="12" r="10"/></svg>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <section id="presupuesto" class="section">
+    <div class="container">
+      <h2>Presupuestador de Trámites</h2>
+
+        
+      
+      <form id="presupuestoForm" class="presupuesto-form">
+        
+        <h3>Datos del Cliente</h3>
+        <div class="form-grid cliente-grid">
+          <div class="form-group">
+            <label for="clienteNombre">Nombre del Cliente</label>
+            <input type="text" id="clienteNombre" placeholder="Juan Pérez" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="vehiculoDesc">Vehículo</label>
+            <input type="text" id="vehiculoDesc" placeholder="VW Amarok 2.0" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="dominio">Dominio</label>
+            <input type="text" id="dominio" placeholder="AB 123 CD" autocomplete="off">
+          </div>
+        </div>
+
+        <br><hr><br>
+        
+        <h3>Detalle de Costos</h3>
+        <div class="form-grid">
+          
+          <div class="form-group">
+            <div class="label-with-button">
+              <label for="itemAranceles">Aranceles DNRPA</label>
+              <a href="https://www2.jus.gov.ar/dnrpa-site/#!/estimador" target="_blank" class="btn-link-externo" title="Ver Aranceles Oficiales">></a>
+            </div>
+            <input type="number" class="calc" id="itemAranceles" placeholder="0">
+          </div>
+
+          <div class="form-group">
+            <div class="label-with-button">
+              <label for="itemSellado">Sellado Rentas</label>
+              <a href="assets/Tabla-de-Valores-V2.pdf" target="_blank" class="btn-link-externo" title="Ver PDF de Sellado">></a>
+            </div>
+            <input type="number" class="calc" id="itemSellado" placeholder="0">
+          </div>
+          
+          <div class="form-group">
+            <label for="itemVarios">Aranceles Varios</label>
+            <input type="number" class="calc" id="itemVarios" placeholder="0">
+          </div>
+        </div>
+
+        <br>
+        <h3>Formularios</h3>
+        <div class="checkbox-grid">
+          <div class="checkbox-group">
+            <input type="checkbox" id="formF08" class="calc-check" data-cost="9000">
+            <label for="formF08">F08</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="formF02" class="calc-check" data-cost="6500">
+            <label for="formF02">F02</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="formF04" class="calc-check" data-cost="6500">
+            <label for="formF04">F04</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="formF59" class="calc-check" data-cost="6500">
+            <label for="formF59">F59</label>
+          </div>
+        </div>
+        
+        <br><hr><br>
+
+        <h3>Certificaciones de Firma</h3>
+        <div class="form-grid firmas-grid">
+          <div class="form-group">
+            <label for="cantidadFirmas">Cantidad de Firmas</label>
+            <select id="cantidadFirmas" class="calc-select">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="totalFirmas">Total Certificaciones</label>
+            <input type="text" id="totalFirmas" value="$ 0" readonly style="background:#2a2a2a; color: var(--accent); font-weight: bold; border-color: #444;">
+          </div>
+        </div>
+
+        <br><hr><br>
+
+        <h3>Honorarios</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="itemHonorarios">Honorarios de Gestoría</label>
+            <input type="number" class="calc" id="itemHonorarios" placeholder="0">
+          </div>
+        </div>
+
+        <div class="total-display">
+          TOTAL: $ <span id="totalDisplay">0</span>
+        </div>
+
+        <br><br>
+
+        <button type="button" id="previsualizarPDF" class="btn btn-ghost btn-generar" style="margin-top: 1rem;">
+          Previsualizar PDF
+        </button>
+        <button type="submit" id="generarPDF" class="btn btn-ghost btn-generar">
+          Generar PDF
+        </button>
+        
+        <div id="pdfPreviewContainer" style="margin-top: 2rem; border: 1px solid #333; border-radius: 8px; overflow: hidden; display: none;">
+            <button type="button" id="cerrarPrevisualizacion" class="btn btn-ghost" style="width:100%; padding:0.5rem; background:#222; border:none; border-bottom:1px solid #444; color:var(--text);">Cerrar Previsualización</button>
+          <iframe id="pdfPreviewFrame" width="100%" height="600px" style="border: none;"></iframe>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="presupuesto.js"></script>
+  <script>
+    const hamburger = document.getElementById("hamburger");
+    const navLinks = document.getElementById("nav-links");
+    if(hamburger) hamburger.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+      hamburger.setAttribute("aria-expanded", navLinks.classList.contains("active"));
+    });
+  </script>
+</body>
+</html>
