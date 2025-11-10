@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           doc.setFontSize(10);
           doc.setFont("helvetica", "normal");
-          doc.text("CECCA AUTOS", pageCenter, 30, { align: "center" });
+          doc.text("CECCA AUTOS - GESTORÍA", pageCenter, 30, { align: "center" });
           doc.text("Aristóbulo del Valle 599, Guaymallén", pageCenter, 35, {
             align: "center",
           });
@@ -486,7 +486,7 @@ document.addEventListener("DOMContentLoaded", () => {
             { align: "center" }
           );
           doc.text(
-            "CECCA AUTOS - info@ceccaautos.com.ar",
+            "CECCA AUTOS - infocompuar@gmail.com",
             pageCenter,
             footerY + 5,
             { align: "center" }
@@ -652,3 +652,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
