@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // =================================================================
-  const COSTO_POR_FIRMA = 30000;
+  const COSTO_POR_FIRMA = 35000;
   const COSTO_POR_SUAT = 8350;
   // =================================================================
 
@@ -652,4 +652,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
