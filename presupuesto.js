@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           doc.setFontSize(10);
           doc.setFont("helvetica", "normal");
-          doc.text("CECCA AUTOS - GESTORÍA", pageCenter, 30, { align: "center" });
+          doc.text("GESTORÍA", pageCenter, 30, { align: "center" });
           doc.text("Aristóbulo del Valle 599, Guaymallén", pageCenter, 35, {
             align: "center",
           });
@@ -652,6 +652,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
 
 
