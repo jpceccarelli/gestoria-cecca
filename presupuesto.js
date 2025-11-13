@@ -486,7 +486,7 @@ document.addEventListener("DOMContentLoaded", () => {
             { align: "center" }
           );
           doc.text(
-            "CECCA AUTOS - infocompuar@gmail.com",
+            "CECCA AUTOMOTORES - infocompuar@gmail.com",
             pageCenter,
             footerY + 5,
             { align: "center" }
@@ -652,6 +652,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
 
 
