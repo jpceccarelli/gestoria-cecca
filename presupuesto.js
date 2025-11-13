@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const pageCenter = pageWidth / 2;
 
     const logo = new Image();
-    logo.src = "assets/logo-cecca.jpg";
+    logo.src = "assets/logo-cecca1.jpg";
 
     return new Promise((resolve, reject) => {
       logo.onload = function () {
@@ -652,5 +652,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
 
