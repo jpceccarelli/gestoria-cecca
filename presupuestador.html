@@ -4,9 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CECCA AUTOS - GESTORÍA | Presupuestos</title>
-    <link rel="stylesheet" href="styles.css?v=1.20" />
+    <link rel="stylesheet" href="styles.css?v=1.22" />
 
     <style>
+      /* --- ESTILOS DEL PRESUPUESTADOR --- */
       .presupuesto-form {
         max-width: 700px;
         margin: 2rem auto 0;
@@ -98,11 +99,13 @@
         -moz-appearance: checkbox;
         appearance: checkbox;
         background-image: none;
+        cursor: pointer;
       }
       .checkbox-group label {
         margin: 0;
         color: var(--text);
         font-weight: 500;
+        cursor: pointer;
       }
 
       .total-display {
@@ -119,7 +122,7 @@
         justify-content: center;
       }
 
-      /* --- INICIO: Estilo para botón de enlace externo (NUEVO) --- */
+      /* --- Botón de enlace externo --- */
       .label-with-button {
         display: flex;
         justify-content: space-between;
@@ -143,8 +146,6 @@
         text-decoration: none;
         transition: all 0.2s ease;
         flex-shrink: 0;
-
-        /* --- NUEVOS ESTILOS PARA <button> --- */
         background: transparent;
         font-family: inherit;
         cursor: pointer;
@@ -153,7 +154,6 @@
         background: var(--accent);
         color: #000;
       }
-      /* --- FIN: Estilo botón --- */
 
       @media (min-width: 769px) {
         .form-grid.cliente-grid {
@@ -187,7 +187,11 @@
         <li>
           <a href="presupuestador.html?tipo=denuncia_robo">DENUNCIA DE ROBO</a>
         </li>
-        <li><a href="index.html#financiacion">DENUNCIA DE VENTA</a></li>
+        <li>
+          <a href="presupuestador.html?tipo=denuncia_venta"
+            >DENUNCIA DE VENTA</a
+          >
+        </li>
       </ul>
     </nav>
 
@@ -377,6 +381,47 @@
             <br />
           </div>
 
+          <div
+            class="seccion-tramite seccion-denuncia-venta"
+            style="display: none"
+          >
+            <h3>Aranceles Denuncia de Venta</h3>
+            <div class="form-grid cliente-grid">
+              <div class="form-group">
+                <label for="dvArancel">Arancel Denuncia</label>
+                <input
+                  type="text"
+                  class="calc"
+                  id="dvArancel"
+                  placeholder="0,00"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="dvInfracciones">Arancel Infracciones</label>
+                <input
+                  type="text"
+                  class="calc"
+                  id="dvInfracciones"
+                  placeholder="0,00"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="dvBajaATM">Arancel Baja ATM</label>
+                <input
+                  type="text"
+                  class="calc"
+                  id="dvBajaATM"
+                  placeholder="0,00"
+                />
+              </div>
+            </div>
+            <br />
+            <hr />
+            <br />
+          </div>
+
           <div class="seccion-tramite seccion-formularios">
             <h3>Formularios</h3>
             <div class="checkbox-grid">
@@ -389,7 +434,8 @@
                 />
                 <label for="formF08">F08</label>
               </div>
-              <div class="checkbox-group">
+
+              <div class="checkbox-group" id="formF02Group">
                 <input
                   type="checkbox"
                   id="formF02"
@@ -398,7 +444,8 @@
                 />
                 <label for="formF02">F02</label>
               </div>
-              <div class="checkbox-group">
+
+              <div class="checkbox-group" id="formF04Group">
                 <input
                   type="checkbox"
                   id="formF04"
@@ -407,7 +454,22 @@
                 />
                 <label for="formF04">F04</label>
               </div>
-              <div class="checkbox-group">
+
+              <div
+                class="checkbox-group"
+                id="formF10Group"
+                style="display: none"
+              >
+                <input
+                  type="checkbox"
+                  id="formF10"
+                  class="calc-check"
+                  data-cost="6500"
+                />
+                <label for="formF10">F10</label>
+              </div>
+
+              <div class="checkbox-group" id="formF59Group">
                 <input
                   type="checkbox"
                   id="formF59"
@@ -417,7 +479,7 @@
                 <label for="formF59">F59</label>
               </div>
 
-              <div class="checkbox-group">
+              <div class="checkbox-group" id="form13IGroup">
                 <input
                   type="checkbox"
                   id="form13I"
@@ -617,7 +679,7 @@
     </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="presupuesto.js?v=1.4"></script>
+    <script src="presupuesto.js?v=1.6"></script>
     <script>
       const hamburger = document.getElementById("hamburger");
       const navLinks = document.getElementById("nav-links");

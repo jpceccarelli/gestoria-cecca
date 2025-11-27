@@ -1,14 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
   // =================================================================
+  // PRECIOS GLOBALES
+  // =================================================================
   const COSTO_POR_FIRMA = 35000;
   const COSTO_POR_SUAT = 8350;
-  // =================================================================
 
-  // --- [INICIO DE LA NUEVA LÓGICA DINÁMICA] ---
+  // --- [INICIO LÓGICA DE VISIBILIDAD] ---
 
   // 1. Leer el parámetro 'tipo' de la URL
   const urlParams = new URLSearchParams(window.location.search);
-  const tipoTramite = urlParams.get("tipo"); // 'auto', 'moto', 'denuncia_robo'
+  const tipoTramite = urlParams.get("tipo"); // 'auto', 'moto', 'denuncia_robo', 'denuncia_venta'
 
   const titulo = document.querySelector("#presupuesto .container h2");
 
@@ -19,6 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const seccionesDenunciaRobo = document.querySelectorAll(
     ".seccion-denuncia-robo"
   );
+  const seccionDenunciaVenta = document.querySelector(
+    ".seccion-denuncia-venta"
+  );
+
   const seccionFormularios = document.querySelector(".seccion-formularios");
   const seccionSuats = document.querySelector(".seccion-suats");
   const seccionFirmas = document.querySelector(".seccion-firmas");
@@ -33,21 +38,29 @@ document.addEventListener("DOMContentLoaded", () => {
       (sec) => (sec.style.display = mostrar ? "block" : "none")
     );
   };
+  // Helper inteligente para checkboxes (oculta y resetea valor)
+  const mostrarCheckbox = (idGroup, mostrar) => {
+    const el = document.getElementById(idGroup);
+    if (el) el.style.display = mostrar ? "flex" : "none";
+    if (!mostrar && el) {
+      const chk = el.querySelector("input[type='checkbox']");
+      if (chk) chk.checked = false;
+    }
+  };
+
+  // --- LOGICA PRINCIPAL SEGÚN TIPO ---
 
   if (tipoTramite === "moto") {
-    // --- LÓGICA PARA MOTO ---
+    // === MOTO ===
     if (titulo) titulo.textContent = "Presupuestador de Moto";
 
-    // --- ** INICIO DEL NUEVO CAMBIO ** ---
-    // Cambiar Placeholders
+    // Placeholders
     const inputVehiculo = document.getElementById("vehiculoDesc");
     const inputDominio = document.getElementById("dominio");
-
     if (inputVehiculo) inputVehiculo.placeholder = "HONDA Wave 110";
     if (inputDominio) inputDominio.placeholder = "A 123 BCD";
-    // --- ** FIN DEL NUEVO CAMBIO ** ---
 
-    // Cambiar Costos
+    // Costos específicos Moto
     const chkF08 = document.getElementById("formF08");
     const chkF02 = document.getElementById("formF02");
     const chkF04 = document.getElementById("formF04");
@@ -55,80 +68,117 @@ document.addEventListener("DOMContentLoaded", () => {
     if (chkF02) chkF02.dataset.cost = "500";
     if (chkF04) chkF04.dataset.cost = "5000";
 
-    // Mostrar/Ocultar
+    // Visibilidad Secciones
     mostrarElemento(seccionCostosTransferencia, true);
     mostrarMultiples(seccionesDenunciaRobo, false);
+    mostrarElemento(seccionDenunciaVenta, false);
     mostrarElemento(seccionFormularios, true);
     mostrarElemento(seccionSuats, true);
     mostrarElemento(seccionFirmas, true);
     if (botonCopiarDNRPA)
       mostrarElemento(botonCopiarDNRPA.parentElement.parentElement, true);
+
+    // Visibilidad Formularios
+    mostrarCheckbox("formF08Group", true);
+    mostrarCheckbox("formF02Group", true);
+    mostrarCheckbox("formF04Group", true);
+    mostrarCheckbox("form3DGroup", true);
+    mostrarCheckbox("formExtravioGroup", false);
+    mostrarCheckbox("formF10Group", false);
   } else if (tipoTramite === "denuncia_robo") {
-    // --- LÓGICA PARA DENUNCIA DE ROBO ---
+    // === DENUNCIA DE ROBO ===
     if (titulo) titulo.textContent = "Presupuestador Denuncia de Robo";
 
-    // Mostrar/Ocultar Secciones
-    mostrarElemento(seccionCostosTransferencia, false); // Oculta costos de transferencia
-    mostrarMultiples(seccionesDenunciaRobo, true); // Muestra costos de denuncia
-    mostrarElemento(seccionFormularios, true); // Muestra formularios
-    mostrarElemento(seccionSuats, true); // Muestra SUATS
-    mostrarElemento(seccionFirmas, true); // Muestra firmas
+    mostrarElemento(seccionCostosTransferencia, false);
+    mostrarMultiples(seccionesDenunciaRobo, true);
+    mostrarElemento(seccionDenunciaVenta, false);
+    mostrarElemento(seccionFormularios, true);
+    mostrarElemento(seccionSuats, true);
+    mostrarElemento(seccionFirmas, true);
 
-    // Ocultar botón de Copiar Dominio
     if (botonCopiarDNRPA)
       mostrarElemento(botonCopiarDNRPA.parentElement.parentElement, false);
 
-    // --- ** NUEVO: Ocultar/Mostrar Checkboxes Específicos ** ---
-    mostrarElemento(document.getElementById("formF08Group"), false);
-    mostrarElemento(document.getElementById("form3DGroup"), false);
-    mostrarElemento(document.getElementById("formExtravioGroup"), true); // Muestra el nuevo
-  } else {
-    // --- LÓGICA PARA AUTO (o por defecto) ---
-    if (titulo) titulo.textContent = "Presupuestador de Auto"; // Título por defecto
+    // Formularios específicos Robo
+    mostrarCheckbox("formF08Group", false);
+    mostrarCheckbox("formF02Group", false);
+    mostrarCheckbox("formF04Group", false);
+    mostrarCheckbox("form3DGroup", false);
+    mostrarCheckbox("formExtravioGroup", true);
+    mostrarCheckbox("formF10Group", false);
+  } else if (tipoTramite === "denuncia_venta") {
+    // === DENUNCIA DE VENTA ===
+    if (titulo) titulo.textContent = "Presupuestador Denuncia de Venta";
 
-    // Mostrar/Ocultar
+    // Ocultar Transferencia y Robo
+    mostrarElemento(seccionCostosTransferencia, false);
+    mostrarMultiples(seccionesDenunciaRobo, false);
+    // Mostrar sección Venta
+    mostrarElemento(seccionDenunciaVenta, true);
+
+    // Comunes
+    mostrarElemento(seccionFormularios, true);
+    mostrarElemento(seccionSuats, true);
+    mostrarElemento(seccionFirmas, true);
+
+    if (botonCopiarDNRPA)
+      mostrarElemento(botonCopiarDNRPA.parentElement.parentElement, false);
+
+    // --- FORMULARIOS ESPECÍFICOS PARA VENTA ---
+    // Pedidos: F10, F59, F13. Ocultar el resto.
+    mostrarCheckbox("formF10Group", true);
+    mostrarCheckbox("formF59Group", true);
+    mostrarCheckbox("form13IGroup", true);
+
+    // Ocultar los que no van
+    mostrarCheckbox("formF08Group", false);
+    mostrarCheckbox("formF02Group", false);
+    mostrarCheckbox("formF04Group", false);
+    mostrarCheckbox("form3DGroup", false);
+    mostrarCheckbox("formExtravioGroup", false);
+  } else {
+    // === AUTO (Defecto) ===
+    if (titulo) titulo.textContent = "Presupuestador de Auto";
+
     mostrarElemento(seccionCostosTransferencia, true);
     mostrarMultiples(seccionesDenunciaRobo, false);
+    mostrarElemento(seccionDenunciaVenta, false);
     mostrarElemento(seccionFormularios, true);
     mostrarElemento(seccionSuats, true);
     mostrarElemento(seccionFirmas, true);
     if (botonCopiarDNRPA)
       mostrarElemento(botonCopiarDNRPA.parentElement.parentElement, true);
 
-    // --- ** NUEVO: Asegurarse de que los checkboxes estén correctos ** ---
-    mostrarElemento(document.getElementById("formF08Group"), true);
-    mostrarElemento(document.getElementById("form3DGroup"), true);
-    mostrarElemento(document.getElementById("formExtravioGroup"), false);
+    // Formularios Default
+    mostrarCheckbox("formF08Group", true);
+    mostrarCheckbox("formF02Group", true);
+    mostrarCheckbox("formF04Group", true);
+    mostrarCheckbox("form3DGroup", true);
+    mostrarCheckbox("formExtravioGroup", false);
+    mostrarCheckbox("formF10Group", false);
   }
-  // --- [FIN DE LA NUEVA LÓGICA] ---
 
-  /**
-   * Convierte un string de número local (ej: "41.485" o "1.250,50")
-   * a un número flotante estándar (ej: 41485 o 1250.50).
-   */
+  // --- [FIN LÓGICA DE VISIBILIDAD] ---
+
+  // Helper para parsear números
   function parseLocalNumber(value) {
-    if (typeof value !== "string") {
-      value = String(value);
-    }
+    if (typeof value !== "string") value = String(value);
     const cleaned = value.replace(/[^0-9.,]/g, "");
     const noThousands = cleaned.replace(/\./g, "");
     const standardized = noThousands.replace(",", ".");
     return parseFloat(standardized) || 0;
   }
 
-  // --- Elementos del DOM ---
   const camposInput = document.querySelectorAll(".calc");
   const camposCheckbox = document.querySelectorAll(".calc-check");
   const selectFirmas = document.getElementById("cantidadFirmas");
   const displayTotal = document.getElementById("totalDisplay");
   const displayTotalFirmas = document.getElementById("totalFirmas");
-  const form = document.getElementById("presupuestoForm"); // Para el reseteo
-
+  const form = document.getElementById("presupuestoForm");
   const selectSuats = document.getElementById("cantidadSuats");
   const displayTotalSuats = document.getElementById("totalSuats");
 
-  // --- Parte 1: Calcular el total automáticamente ---
-
+  // --- CALCULAR TOTAL ---
   function formatCurrency(value) {
     return value.toLocaleString("es-AR", {
       minimumFractionDigits: 2,
@@ -139,23 +189,22 @@ document.addEventListener("DOMContentLoaded", () => {
   function calcularTotal() {
     let total = 0;
 
-    // Suma los campos de texto/número (.calc)
+    // Suma inputs visibles (.calc)
     camposInput.forEach((campo) => {
-      // Solo suma si el campo está visible
+      // offsetParent verifica que el elemento sea visible en pantalla
       if (campo.offsetParent !== null) {
-        const valor = parseLocalNumber(campo.value);
-        total += valor;
+        total += parseLocalNumber(campo.value);
       }
     });
 
-    // Suma los checkboxes chequeados (solo si son visibles)
+    // Suma checkboxes visibles y chequeados
     camposCheckbox.forEach((checkbox) => {
       if (checkbox.checked && checkbox.offsetParent !== null) {
         total += parseFloat(checkbox.dataset.cost) || 0;
       }
     });
 
-    // Suma las certificaciones de firma (solo si es visible)
+    // Suma firmas
     if (selectFirmas.offsetParent !== null) {
       const cantFirmas = parseInt(selectFirmas.value) || 0;
       const subtotalFirmas = cantFirmas * COSTO_POR_FIRMA;
@@ -163,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
       displayTotalFirmas.value = `$ ${formatCurrency(subtotalFirmas)}`;
     }
 
-    // Suma los SUATS (solo si es visible)
+    // Suma SUATS
     if (selectSuats.offsetParent !== null) {
       const cantSuats = parseInt(selectSuats.value) || 0;
       const subtotalSuats = cantSuats * COSTO_POR_SUAT;
@@ -171,30 +220,18 @@ document.addEventListener("DOMContentLoaded", () => {
       displayTotalSuats.value = `$ ${formatCurrency(subtotalSuats)}`;
     }
 
-    // Actualiza el display total
     displayTotal.textContent = formatCurrency(total);
   }
 
-  // Añade "escuchadores" a todos los campos
-  camposInput.forEach((campo) =>
-    campo.addEventListener("input", calcularTotal)
-  );
-  camposCheckbox.forEach((checkbox) =>
-    checkbox.addEventListener("change", calcularTotal)
-  );
+  // Event Listeners
+  camposInput.forEach((c) => c.addEventListener("input", calcularTotal));
+  camposCheckbox.forEach((c) => c.addEventListener("change", calcularTotal));
   selectFirmas.addEventListener("change", calcularTotal);
   selectSuats.addEventListener("change", calcularTotal);
-
-  // Escuchador para el botón de "Limpiar Formulario"
-  form.addEventListener("reset", () => {
-    setTimeout(calcularTotal, 0);
-  });
-
-  // Calcula el total por primera vez
+  form.addEventListener("reset", () => setTimeout(calcularTotal, 0));
   calcularTotal();
 
-  // --- Parte 2: Generar y Previsualizar el PDF ---
-
+  // --- GENERACIÓN PDF ---
   const botonGenerarPDF = document.getElementById("generarPDF");
   const botonPrevisualizarPDF = document.getElementById("previsualizarPDF");
   const pdfPreviewContainer = document.getElementById("pdfPreviewContainer");
@@ -202,25 +239,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const cerrarPrevisualizacionBtn = document.getElementById(
     "cerrarPrevisualizacion"
   );
-
   let doc = null;
 
-  // --- Función principal para crear el PDF (Tu versión) ---
   function crearPDFInterno() {
     const { jsPDF } = window.jspdf;
     doc = new jsPDF();
-
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const pageCenter = pageWidth / 2;
-
     const logo = new Image();
     logo.src = "assets/logo-cecca1.jpg";
 
     return new Promise((resolve, reject) => {
       logo.onload = function () {
         try {
-          // --- 1. Lee todos los datos del formulario ---
           const cliente =
             document.getElementById("clienteNombre").value || "Cliente";
           const vehiculo =
@@ -231,12 +263,11 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("itemHonorarios").value
           );
 
-          // --- 2. Dibuja el PDF (Encabezado) ---
+          // Header
           const logoWidth = 40;
           const logoHeight = 10;
           const logoX = pageCenter - logoWidth / 2;
           doc.addImage(logo, "JPEG", logoX, 10, logoWidth, logoHeight);
-
           doc.setFontSize(10);
           doc.setFont("helvetica", "normal");
           doc.text("GESTORÍA", pageCenter, 30, { align: "center" });
@@ -247,13 +278,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
           doc.setFontSize(20);
           doc.setFont("helvetica", "bold");
-
-          let tituloPDF = "PRESUPUESTO DE GESTORÍA"; // Default
-          if (tipoTramite === "moto") {
-            tituloPDF = "PRESUPUESTO DE MOTO";
-          } else if (tipoTramite === "denuncia_robo") {
+          let tituloPDF = "PRESUPUESTO DE GESTORÍA";
+          if (tipoTramite === "moto") tituloPDF = "PRESUPUESTO DE MOTO";
+          else if (tipoTramite === "denuncia_robo")
             tituloPDF = "PRESUPUESTO DENUNCIA DE ROBO";
-          }
+          else if (tipoTramite === "denuncia_venta")
+            tituloPDF = "PRESUPUESTO DENUNCIA DE VENTA";
 
           doc.text(tituloPDF, pageCenter, 60, { align: "center" });
           doc.setLineWidth(0.5);
@@ -270,7 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
           doc.text(`Cliente: ${cliente}`, 15, 75);
           doc.text(`Vehículo: ${vehiculo}`, 15, 82);
           doc.text(`Dominio: ${dominio}`, 15, 89);
-          doc.setLineWidth(0.5);
           doc.line(15, 98, pageWidth - 15, 98);
 
           doc.setFontSize(14);
@@ -284,44 +313,30 @@ document.addEventListener("DOMContentLoaded", () => {
           function agregarLinea(texto, monto) {
             if (monto > 0) {
               doc.text(texto, 20, currentY);
-              doc.text(
-                `$ ${monto.toLocaleString("es-AR", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}`,
-                pageWidth - 15,
-                currentY,
-                { align: "right" }
-              );
+              doc.text(`$ ${formatCurrency(monto)}`, pageWidth - 15, currentY, {
+                align: "right",
+              });
               currentY += 8;
             }
           }
 
-          // --- 3. Dibuja el CUERPO del PDF (Dinámico) ---
+          // --- COSTOS DINÁMICOS ---
+          // 1. Formularios
+          const getCheckCost = (id) => {
+            const el = document.getElementById(id);
+            return el && el.checked && el.offsetParent !== null
+              ? parseFloat(el.dataset.cost)
+              : 0;
+          };
 
-          // Leer Formularios (siempre se leen)
-          const costF08 = document.getElementById("formF08").checked
-            ? parseFloat(document.getElementById("formF08").dataset.cost)
-            : 0;
-          const costF02 = document.getElementById("formF02").checked
-            ? parseFloat(document.getElementById("formF02").dataset.cost)
-            : 0;
-          const costF04 = document.getElementById("formF04").checked
-            ? parseFloat(document.getElementById("formF04").dataset.cost)
-            : 0;
-          const costF59 = document.getElementById("formF59").checked
-            ? parseFloat(document.getElementById("formF59").dataset.cost)
-            : 0;
-          const cost13I = document.getElementById("form13I").checked
-            ? parseFloat(document.getElementById("form13I").dataset.cost)
-            : 0;
-          const cost3D = document.getElementById("form3D").checked
-            ? parseFloat(document.getElementById("form3D").dataset.cost)
-            : 0;
-          // ** NUEVO: Leer Extravío **
-          const costExtravio = document.getElementById("formExtravio").checked
-            ? parseFloat(document.getElementById("formExtravio").dataset.cost)
-            : 0;
+          const costF08 = getCheckCost("formF08");
+          const costF02 = getCheckCost("formF02");
+          const costF04 = getCheckCost("formF04");
+          const costF59 = getCheckCost("formF59");
+          const cost13I = getCheckCost("form13I");
+          const cost3D = getCheckCost("form3D");
+          const costExtravio = getCheckCost("formExtravio");
+          const costF10 = getCheckCost("formF10");
 
           const totalFormularios =
             costF08 +
@@ -330,20 +345,21 @@ document.addEventListener("DOMContentLoaded", () => {
             costF59 +
             cost13I +
             cost3D +
-            costExtravio;
+            costExtravio +
+            costF10;
 
-          // Leer Firmas (siempre se leen)
+          // 2. Firmas y SUATS
           const cantFirmas =
             parseInt(document.getElementById("cantidadFirmas").value) || 0;
           const totalCertificaciones = cantFirmas * COSTO_POR_FIRMA;
-
-          // Leer SUATS (siempre se leen)
           const cantSuats =
             parseInt(document.getElementById("cantidadSuats").value) || 0;
           const totalSuats = cantSuats * COSTO_POR_SUAT;
 
+          // 3. Gastos Registrales según tipo
+          let gastosRegistrales = 0;
+
           if (tipoTramite === "denuncia_robo") {
-            // --- PDF PARA DENUNCIA DE ROBO ---
             const drArancel = parseLocalNumber(
               document.getElementById("drArancel").value
             );
@@ -357,21 +373,34 @@ document.addEventListener("DOMContentLoaded", () => {
               document.getElementById("iiArancel").value
             );
 
-            // === INICIO DEL CAMBIO ===
-            // Agrupamos todos los costos de Denuncia + SUATS
-            const gastosRegistrales =
+            gastosRegistrales =
               drArancel + drArancelBaja + ceArancel + iiArancel + totalSuats;
+            agregarLinea("Arancel Denuncia de Robo", drArancel);
+            agregarLinea("Arancel de Baja", drArancelBaja);
+            agregarLinea("Cert. Estado de Dominio", ceArancel);
+            agregarLinea("Informe de Infracciones", iiArancel);
+            agregarLinea("SUATS", totalSuats);
+          } else if (tipoTramite === "denuncia_venta") {
+            // NUEVO: Denuncia Venta
+            const dvArancel = parseLocalNumber(
+              document.getElementById("dvArancel").value
+            );
+            const dvInfracciones = parseLocalNumber(
+              document.getElementById("dvInfracciones").value
+            );
+            const dvBajaATM = parseLocalNumber(
+              document.getElementById("dvBajaATM").value
+            );
 
-            agregarLinea("Gastos Registrales", gastosRegistrales);
+            gastosRegistrales =
+              dvArancel + dvInfracciones + dvBajaATM + totalSuats;
 
-            total =
-              gastosRegistrales +
-              totalFormularios +
-              totalCertificaciones +
-              honorarios;
-            // === FIN DEL CAMBIO ===
+            agregarLinea("Arancel Denuncia de Venta", dvArancel);
+            agregarLinea("Arancel de Infracciones", dvInfracciones);
+            agregarLinea("Arancel Baja ATM", dvBajaATM);
+            agregarLinea("SUATS", totalSuats);
           } else {
-            // --- PDF PARA TRANSFERENCIA (AUTO/MOTO) ---
+            // Transferencias
             const aranceles = parseLocalNumber(
               document.getElementById("itemAranceles").value
             );
@@ -382,56 +411,47 @@ document.addEventListener("DOMContentLoaded", () => {
               document.getElementById("itemVarios").value
             );
 
-            const gastosRegistrales = aranceles + sellado + varios + totalSuats; // SUATS va aquí para transferencias
-
-            total =
-              gastosRegistrales +
-              totalFormularios +
-              totalCertificaciones +
-              honorarios;
-
-            agregarLinea(
-              "Gastos Registrales (Aranceles, Sellado, Suats, etc.)",
-              gastosRegistrales
-            );
+            gastosRegistrales = aranceles + sellado + varios + totalSuats;
+            agregarLinea("Aranceles DNRPA", aranceles);
+            agregarLinea("Sellado Rentas", sellado);
+            agregarLinea("Aranceles Varios", varios);
+            agregarLinea("SUATS", totalSuats);
           }
 
-          // --- SECCIONES COMUNES (Formularios, Suats, Firmas) ---
+          total =
+            gastosRegistrales +
+            totalFormularios +
+            totalCertificaciones +
+            honorarios;
 
-          // Sección Formularios (si hay)
+          // Render Formularios
           if (totalFormularios > 0) {
-            currentY += 5;
+            currentY += 8;
             doc.setFontSize(14);
             doc.setFont("helvetica", "bold");
             doc.text("Formularios", 15, currentY);
             currentY += 10;
             doc.setFontSize(12);
             doc.setFont("helvetica", "normal");
-
             agregarLinea("Formulario F08", costF08);
             agregarLinea("Formulario F02", costF02);
             agregarLinea("Formulario F04", costF04);
             agregarLinea("Formulario F59", costF59);
             agregarLinea("Formulario 13I", cost13I);
             agregarLinea("Formulario 3D", cost3D);
-            agregarLinea("Formulario Extravío", costExtravio); // ** NUEVO **
+            agregarLinea("Formulario Extravío", costExtravio);
+            agregarLinea("Formulario F10", costF10);
           }
 
-          // === INICIO DEL CAMBIO ===
-          // Sección SUATS (Eliminada de aquí)
-          // Ya se incluye en "Gastos Registrales" en ambos casos.
-          // === FIN DEL CAMBIO ===
-
-          // Sección Firmas (si hay)
+          // Render Firmas
           if (totalCertificaciones > 0) {
-            currentY += 5;
+            currentY += 8;
             doc.setFontSize(14);
             doc.setFont("helvetica", "bold");
             doc.text("Certificaciones de Firma", 15, currentY);
             currentY += 10;
             doc.setFontSize(12);
             doc.setFont("helvetica", "normal");
-
             agregarLinea(
               `Cantidad de Firmas (${cantFirmas} x $${formatCurrency(
                 COSTO_POR_FIRMA
@@ -440,42 +460,29 @@ document.addEventListener("DOMContentLoaded", () => {
             );
           }
 
-          // --- 4. Dibuja el PIE del PDF (Honorarios y Total) ---
-
+          // Render Honorarios y Total
           currentY += 5;
-          doc.setLineWidth(0.5);
           doc.line(15, currentY, pageWidth - 15, currentY);
           currentY += 10;
-
-          // Sección Honorarios
           doc.setFontSize(14);
           doc.setFont("helvetica", "bold");
           doc.text("Honorarios", 15, currentY);
           currentY += 10;
           doc.setFontSize(12);
-
+          doc.setFont("helvetica", "normal");
           agregarLinea("Honorarios de Gestoría", honorarios);
 
           currentY += 5;
-          doc.setLineWidth(0.5);
           doc.line(15, currentY, pageWidth - 15, currentY);
-
-          // Total
           currentY += 12;
           doc.setFontSize(18);
           doc.setFont("helvetica", "bold");
           doc.text("TOTAL A ABONAR:", 15, currentY);
-          doc.text(
-            `$ ${total.toLocaleString("es-AR", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}`,
-            pageWidth - 15,
-            currentY,
-            { align: "right" }
-          );
+          doc.text(`$ ${formatCurrency(total)}`, pageWidth - 15, currentY, {
+            align: "right",
+          });
 
-          // Pie de página (fijo abajo)
+          // Footer
           const footerY = pageHeight - 20;
           doc.setFontSize(10);
           doc.setFont("helvetica", "italic");
@@ -497,73 +504,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
           resolve(doc);
         } catch (error) {
-          console.error("Error al generar el PDF:", error);
-          alert("Hubo un error al generar el PDF. Revisa la consola.");
+          console.error(error);
           reject(error);
         }
       };
-
-      logo.onerror = function () {
-        alert(
-          "Error: No se pudo cargar la imagen del logo. Revisa la ruta en 'presupuesto.js'."
-        );
-        reject("Error cargando el logo");
-      };
+      logo.onerror = () => reject("Error cargando logo");
     });
   }
 
-  // --- Manejadores de eventos de los botones PDF (CON VALIDACIÓN) ---
-
   botonGenerarPDF.addEventListener("click", async (e) => {
     e.preventDefault();
-
-    const totalFinal = parseLocalNumber(displayTotal.textContent);
-    if (totalFinal === 0) {
-      alert(
-        "No se puede generar un presupuesto con total $0,00.\nPor favor, añade algún costo."
-      );
-      return;
-    }
-
+    if (parseLocalNumber(displayTotal.textContent) === 0)
+      return alert("Total es $0,00");
     pdfPreviewContainer.style.display = "none";
     try {
       await crearPDFInterno();
       const cliente =
         document.getElementById("clienteNombre").value || "Cliente";
       const dominio = document.getElementById("dominio").value || "SinDominio";
-
-      let nombreArchivo = `Presupuesto - ${cliente} - ${dominio}.pdf`; // Default
-      if (tipoTramite === "moto") {
-        nombreArchivo = `Presupuesto Moto - ${cliente} - ${dominio}.pdf`;
-      } else if (tipoTramite === "denuncia_robo") {
-        nombreArchivo = `Presupuesto Denuncia Robo - ${cliente} - ${dominio}.pdf`;
-      }
-
+      let nombreArchivo = `Presupuesto - ${cliente} - ${dominio}.pdf`;
+      if (tipoTramite === "denuncia_venta")
+        nombreArchivo = `Presupuesto Denuncia Venta - ${cliente}.pdf`;
       doc.save(nombreArchivo);
-    } catch (error) {
-      console.error("Fallo al generar y descargar PDF:", error);
+    } catch (e) {
+      console.error(e);
     }
   });
 
   botonPrevisualizarPDF.addEventListener("click", async (e) => {
     e.preventDefault();
-
-    const totalFinal = parseLocalNumber(displayTotal.textContent);
-    if (totalFinal === 0) {
-      alert(
-        "No se puede previsualizar un presupuesto con total $0,00.\nPor favor, añade algún costo."
-      );
-      return;
-    }
-
+    if (parseLocalNumber(displayTotal.textContent) === 0)
+      return alert("Total es $0,00");
     try {
       await crearPDFInterno();
-      const pdfDataUri = doc.output("datauristring");
-      pdfPreviewFrame.src = pdfDataUri;
+      pdfPreviewFrame.src = doc.output("datauristring");
       pdfPreviewContainer.style.display = "block";
       pdfPreviewContainer.scrollIntoView({ behavior: "smooth" });
-    } catch (error) {
-      console.error("Fallo al previsualizar PDF:", error);
+    } catch (e) {
+      console.error(e);
     }
   });
 
@@ -572,88 +550,53 @@ document.addEventListener("DOMContentLoaded", () => {
     pdfPreviewFrame.src = "";
   });
 
-  // --- Parte 3: Copiar Dominio y abrir enlace DNRPA ---
-
+  // Copiar Dominio
   const inputDominio = document.getElementById("dominio");
-  const btnCopiarDominio = document.getElementById("btnCopiarDominio");
   const urlDNRPA = "https://www2.jus.gov.ar/dnrpa-site/#!/estimador";
-
-  if (btnCopiarDominio) {
-    btnCopiarDominio.addEventListener("click", () => {
-      const dominioTexto = inputDominio.value
-        .trim()
-        .toUpperCase()
-        .replace(/\s/g, "");
-
-      if (!dominioTexto) {
+  if (botonCopiarDNRPA) {
+    botonCopiarDNRPA.addEventListener("click", () => {
+      const dom = inputDominio.value.trim().toUpperCase().replace(/\s/g, "");
+      if (!dom) return window.open(urlDNRPA, "_blank");
+      navigator.clipboard.writeText(dom).then(() => {
+        botonCopiarDNRPA.textContent = "✓";
         window.open(urlDNRPA, "_blank");
-        return;
-      }
-
-      navigator.clipboard
-        .writeText(dominioTexto)
-        .then(() => {
-          const originalText = btnCopiarDominio.textContent;
-          btnCopiarDominio.textContent = "✓";
-          window.open(urlDNRPA, "_blank");
-          setTimeout(() => {
-            btnCopiarDominio.textContent = originalText;
-          }, 1500);
-        })
-        .catch((err) => {
-          console.error("Error al copiar el dominio: ", err);
-          window.open(urlDNRPA, "_blank");
-        });
+        setTimeout(() => (botonCopiarDNRPA.textContent = ">"), 1500);
+      });
     });
-  } else {
-    console.warn("No se encontró el botón con id 'btnCopiarDominio'.");
   }
 
-  // --- Parte 4 (Revisada): Cálculo automático de Sellado (1.25%) ---
-
+  // Sellado auto
   const inputTasacion = document.getElementById("valorTasacion");
   const inputSellado = document.getElementById("itemSellado");
-
   if (inputTasacion && inputSellado) {
     inputTasacion.addEventListener("input", () => {
-      const baseValue = parseLocalNumber(inputTasacion.value);
-      const calculatedValue = baseValue * 0.0125;
-      inputSellado.value = calculatedValue.toFixed(2).replace(".", ",");
+      inputSellado.value = (parseLocalNumber(inputTasacion.value) * 0.0125)
+        .toFixed(2)
+        .replace(".", ",");
       calcularTotal();
     });
   }
 
-  // --- Parte 5: Bloquear entrada de letras en campos numéricos ---
-
+  // Input Numérico
   const camposSoloNumeros = [
     "itemAranceles",
     "valorTasacion",
     "itemVarios",
     "itemHonorarios",
-    // AÑADIDOS LOS NUEVOS CAMPOS
     "drArancel",
     "drArancelBaja",
     "ceArancel",
     "iiArancel",
+    "dvArancel",
+    "dvInfracciones",
+    "dvBajaATM",
   ];
-
-  function forzarEntradaNumerica(event) {
-    const valorActual = event.target.value;
-    const valorLimpio = valorActual.replace(/[^0-9.,]/g, "");
-    if (valorActual !== valorLimpio) {
-      event.target.value = valorLimpio;
-    }
-  }
-
   camposSoloNumeros.forEach((id) => {
-    const campo = document.getElementById(id);
-    if (campo) {
-      campo.addEventListener("input", forzarEntradaNumerica);
-    }
+    const el = document.getElementById(id);
+    if (el)
+      el.addEventListener(
+        "input",
+        (e) => (e.target.value = e.target.value.replace(/[^0-9.,]/g, ""))
+      );
   });
 });
-
-
-
-
-
