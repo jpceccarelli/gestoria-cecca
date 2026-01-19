@@ -412,10 +412,10 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             gastosRegistrales = aranceles + sellado + varios + totalSuats;
-            agregarLinea("Aranceles DNRPA", aranceles);
-            agregarLinea("Sellado Rentas", sellado);
-            agregarLinea("Aranceles Varios", varios);
-            agregarLinea("SUATS", totalSuats);
+           agregarLinea(
+              "Gastos Registrales (Aranceles, Sellado, Suats, Varios)",
+              gastosRegistrales
+            );
           }
 
           total =
@@ -600,3 +600,4 @@ document.addEventListener("DOMContentLoaded", () => {
       );
   });
 });
+
