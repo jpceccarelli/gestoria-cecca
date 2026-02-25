@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // =================================================================
   // PRECIOS GLOBALES
   // =================================================================
-  const COSTO_POR_FIRMA = 35000;
-  const COSTO_POR_SUAT = 8350;
+  const COSTO_POR_FIRMA = 40000;
+  const COSTO_POR_SUAT = 8600;
 
   // --- [INICIO LÓGICA DE VISIBILIDAD] ---
 
@@ -64,9 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const chkF08 = document.getElementById("formF08");
     const chkF02 = document.getElementById("formF02");
     const chkF04 = document.getElementById("formF04");
-    if (chkF08) chkF08.dataset.cost = "5500";
-    if (chkF02) chkF02.dataset.cost = "500";
-    if (chkF04) chkF04.dataset.cost = "5000";
+    if (chkF08) chkF08.dataset.cost = "7500";
+    if (chkF02) chkF02.dataset.cost = "6000";
+    if (chkF04) chkF04.dataset.cost = "6000";
 
     // Visibilidad Secciones
     mostrarElemento(seccionCostosTransferencia, true);
@@ -600,4 +600,5 @@ document.addEventListener("DOMContentLoaded", () => {
       );
   });
 });
+
 
