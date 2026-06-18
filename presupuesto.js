@@ -101,8 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Formularios específicos Robo
     mostrarCheckbox("formF08Group", false);
-    mostrarCheckbox("formF02Group", false);
-    mostrarCheckbox("formF04Group", false);
+    mostrarCheckbox("formF02Group", true);
+    mostrarCheckbox("formF04Group", true);
     mostrarCheckbox("form3DGroup", false);
     mostrarCheckbox("formExtravioGroup", true);
     mostrarCheckbox("formF10Group", false);
