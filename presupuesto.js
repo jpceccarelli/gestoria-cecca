@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             gastosRegistrales = aranceles + sellado + varios + totalSuats;
            agregarLinea(
-              "Gastos Registrales (Aranceles, Sellado, Suats, Varios)",
+              "Gastos Registrales (Aranceles, Sellado y Suats)",
               gastosRegistrales
             );
           }
@@ -487,7 +487,7 @@ document.addEventListener("DOMContentLoaded", () => {
           doc.setFontSize(10);
           doc.setFont("helvetica", "italic");
           doc.text(
-            "Presupuesto válido por 5 días hábiles.",
+            "El valor es aproximado, al presentar el mismo, puede sufrir variaciones.",
             pageCenter,
             footerY,
             { align: "center" }
