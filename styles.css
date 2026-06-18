@@ -74,11 +74,7 @@ body {
   justify-content: space-between;
   padding: 0 1.25rem;
   z-index: 1400;
-  background: linear-gradient(
-    90deg,
-    rgba(13, 13, 13, 0.95),
-    rgba(20, 20, 20, 0.9)
-  );
+  background: #0f1c2a;
   backdrop-filter: blur(6px);
   box-shadow: var(--shadow-2);
 }
