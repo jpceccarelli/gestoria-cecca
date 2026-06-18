@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =================================================================
   // PRECIOS GLOBALES
   // =================================================================
-  const COSTO_POR_FIRMA = 40000;
+  const COSTO_POR_FIRMA = 43000;
   const COSTO_POR_SUAT = 8600;
 
   // --- [INICIO LÓGICA DE VISIBILIDAD] ---
