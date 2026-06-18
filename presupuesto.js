@@ -375,11 +375,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             gastosRegistrales =
               drArancel + drArancelBaja + ceArancel + iiArancel + totalSuats;
-            agregarLinea("Arancel Denuncia de Robo", drArancel);
-            agregarLinea("Arancel de Baja", drArancelBaja);
-            agregarLinea("Cert. Estado de Dominio", ceArancel);
-            agregarLinea("Informe de Infracciones", iiArancel);
-            agregarLinea("SUATS", totalSuats);
+            agregarLinea("Aranceles Registrales + SUATS", gastosRegistrales);
+          
           } else if (tipoTramite === "denuncia_venta") {
             // NUEVO: Denuncia Venta
             const dvArancel = parseLocalNumber(
